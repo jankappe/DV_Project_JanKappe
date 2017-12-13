@@ -6,7 +6,7 @@ google.charts.setOnLoadCallback(drawChart);
 function drawChart() {
 	var minYear = 2005
 	var maxYear = 2016
-	var testData = [['IMDB', 'titleyear']];
+	var testData = [['IMDB', 'Title year', 'Movie Title']];
 
 	var years = maxYear - minYear
 	for (var i = 0; i < years; i++) {
@@ -14,9 +14,9 @@ function drawChart() {
 	}
 
 	movies.forEach(function(m) {
-		if(m.imdb_score != null && m.title_year >= minYear && m.title_year <= maxYear) //parseInt(m.movie_facebook_likes) > 100 && 
+		if(m.imdb_score != null && m.title_year >= minYear && m.title_year <= maxYear) 
 		{
-			tempArr = [parseFloat(m.imdb_score), m.title_year]
+			tempArr = [parseFloat(m.imdb_score), m.title_year, m.movie_title]
 			for (var i = 0; i < years; i++) {
 				if(i == m.title_year - minYear)
 				{
@@ -53,13 +53,13 @@ function drawChart() {
           'controlType': 'NumberRangeFilter',
           'containerId': 'filter_div',
           'options': {
-            'filterColumnLabel': 'titleyear'
+            'filterColumnLabel': 'Title year'
           }
         });
 
         var viewArr = [0]
         for (var i = 0; i < years; i++) {
-        	viewArr.push(i+2)
+        	viewArr.push(i+3)
         }
         console.log(viewArr)
 
@@ -69,10 +69,10 @@ function drawChart() {
           'chartType': 'ScatterChart',
           'containerId': 'chart_div',
           'options': {
-          	'titel': "Does a movie's Facebook likes say anything about the quality?",
-            'width': 1500,
-            'height': 700,
+            'width': 1300,
+            'height': 550,
             'colors': colorArr,
+            'dataOpacity': 0.8,
             'legend': 'right',
             'hAxis': {title: 'IMDB Score', minValue: 0, maxValue: 10},
           	'vAxis': {title: 'Number of Facebook likes', minValue: 0, maxValue: 400000}
