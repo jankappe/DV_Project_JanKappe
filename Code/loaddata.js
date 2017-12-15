@@ -6,10 +6,6 @@ google.charts.setOnLoadCallback(drawChart);
 function drawChart() {
 	var minYear = 2005
 	var maxYear = 2017
-	var testData = [['IMDB', 'Title year', 'Movie Title']];
-
-
-  // TEST
 
   var columnData = new google.visualization.DataTable();
   columnData.addColumn('number', 'IMDB Score');
@@ -24,7 +20,7 @@ function drawChart() {
   movies.forEach(function(m) {
     if(m.imdb_score != null && m.title_year >= minYear && m.title_year <= maxYear) 
     {
-      var tempArr = [parseFloat(m.imdb_score), m.title_year, m.movie_title]
+      var tempArr = [parseFloat(m.imdb_score), m.title_year, "This should be the tooltip"]
       for (var i = 0; i < years; i++) {
         if(i == m.title_year - minYear)
         {
@@ -38,6 +34,8 @@ function drawChart() {
       columnData.addRow(tempArr)
     } 
   });
+
+  console.log(columnData)
 
   var formatter = new google.visualization.NumberFormat(
     {pattern:'####'});
@@ -71,7 +69,7 @@ function drawChart() {
 
     var viewArr = [0]
     for (var i = 0; i < years; i++) {
-      viewArr.push(i+2)
+      viewArr.push(i+3)
     }
 
         // Create a pie chart, passing some options
@@ -81,6 +79,9 @@ function drawChart() {
           'options': {
             'width': 1200,
             'height': 550,
+            'tooltip': {
+              'isHtml': true
+            },
             'chartArea': {'width': '80%', 'height': '90%'},
             'colors': colorArr,
             'dataOpacity': 0.8,
