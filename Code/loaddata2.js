@@ -10,9 +10,10 @@ function drawChart() {
 
   var columnData = new google.visualization.DataTable();
   columnData.addColumn('number', 'IMDB Score');
-  columnData.addColumn('number', "Likes")
-  columnData.addColumn({type: 'string', role: 'tooltip'});
+  columnData.addColumn('number', "Facebook likes")
+  columnData.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}})
   columnData.addColumn({type: 'string', role: 'style'} );
+  columnData.addColumn('number', "TitleYear")
 
   var rainbow = new Rainbow(); 
   rainbow.setNumberRange(1, years);
@@ -29,36 +30,55 @@ function drawChart() {
     {
       var tempArr = [parseFloat(m.imdb_score), 
                      m.movie_facebook_likes, 
-                     m.movie_title + "\nTitle year: " + m.title_year + "\nFacebook likes: " + m.movie_facebook_likes + "\nIMDB score: " + m.imdb_score, 
-                     'point {size: 5; fill-color: #' + rainbow.colorAt(m.title_year-minYear)]
+                     "<div style='margin: 10px'><font size='3'><b>" + m.movie_title + "</b>" + "<br>Title year: <b>" + m.title_year + "</b><br>Facebook likes: <b>" + m.movie_facebook_likes + "</b><br>IMDB score: <b>" + m.imdb_score + "</b></font></div>", 
+                     'point {size: 5; fill-color: #' + rainbow.colorAt(m.title_year-minYear),
+                     m.title_year]
       
       columnData.addRow(tempArr)
     } 
   });
 
-  console.log(columnData)
 
-  var formatter = new google.visualization.NumberFormat(
-    {pattern:'####'});
+  var dashboard = new google.visualization.Dashboard(
+  document.getElementById('dashboard_div'));
 
-	//create a gradient palette using RainbowVis
+  var timeSlider = new google.visualization.ControlWrapper({
+      'controlType': 'NumberRangeFilter',
+      'containerId': 'filter_div',
+      'options': {
+        'filterColumnLabel': 'TitleYear',
+        'ui': {
+          'format': '#'
+        }
+      }
+  });
 
-        var options = {
-            width: 1200,
-            height: 550,
-            tooltip: {
-              isHtml: true
+      var scatter_chart = new google.visualization.ChartWrapper({
+          'chartType': 'ScatterChart',
+          'containerId': 'chart_div',
+          'options': {
+            'width': 1200,
+            'height': 550,
+            'tooltip': {
+              'isHtml': true
             },
-            chartArea: {width: '80%', height: '90%'},
-            dataOpacity: 0.8,
-            legend: 'none',
-            hAxis: {title: 'IMDB Score', minValue: 0, maxValue: 10},
-            vAxis: {title: 'Number of Facebook likes', minValue: 0, maxValue: 400000},
-          }
+            'chartArea': {'width': '85%', 'height': '80%'},
+            'dataOpacity': 0.8,
+            'legend': 'none',
+            'hAxis': {title: 'IMDB Score', minValue: 0, maxValue: 10},
+            'vAxis': {title: 'Number of Facebook likes', minValue: 0, maxValue: 400000},
+          },
+          'view': {'columns': [0,1,2,3]}
+    });
 
-        var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
 
-        chart.draw(columnData, options);  
+    var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
 
+    var view = new google.visualization.DataView(columnData);
+
+
+    dashboard.bind(timeSlider, scatter_chart)
+
+    dashboard.draw(view) 
 
 }
