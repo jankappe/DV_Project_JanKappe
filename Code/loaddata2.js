@@ -13,7 +13,7 @@ function drawChart() {
   columnData.addColumn('number', "Facebook likes")
   columnData.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}})
   columnData.addColumn({type: 'string', role: 'style'} );
-  columnData.addColumn('number', "TitleYear")
+  columnData.addColumn('number', "Title Year")
 
   var rainbow = new Rainbow(); 
   rainbow.setNumberRange(1, years);
@@ -30,7 +30,7 @@ function drawChart() {
     {
       var tempArr = [parseFloat(m.imdb_score), 
                      m.movie_facebook_likes, 
-                     "<div style='margin: 10px'><font size='3'><b>" + m.movie_title + "</b>" + "<br>Title year: <b>" + m.title_year + "</b><br>Facebook likes: <b>" + m.movie_facebook_likes + "</b><br>IMDB score: <b>" + m.imdb_score + "</b></font></div>", 
+                     "<div style='margin: 10px'><font size='3'><b>" + m.movie_title + "</b>" + "<br>Title year: <b>" + m.title_year + "</b><br>Facebook likes: <b>" + m.movie_facebook_likes + "</b><br>IMDB score: <b>" + m.imdb_score + "</b><br>Number of votes: <b>" + m.num_voted_users + "</b></font></div>", 
                      'point {size: 5; fill-color: #' + rainbow.colorAt(m.title_year-minYear),
                      m.title_year]
       
@@ -46,7 +46,7 @@ function drawChart() {
       'controlType': 'NumberRangeFilter',
       'containerId': 'filter_div',
       'options': {
-        'filterColumnLabel': 'TitleYear',
+        'filterColumnLabel': 'Title Year',
         'ui': {
           'format': '#'
         }
